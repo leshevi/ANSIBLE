@@ -1,0 +1,19 @@
+---
+- name: Playbook | mysql
+  hosts: mysql
+  become: true
+  roles:
+    - mysql
+
+- name: Install php
+  become: true
+  hosts: php
+  roles:
+    - php
+
+- name: Install nginx and wordpress
+  become: true
+  hosts: nginx
+  roles:
+    - nginx
+    - wordpress
