@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  remote_user: root
+  tasks:
+  - name: Ensure Nginx is present using apt
+    become: yes
+    apt:
+      name: nginx
+      update_cache: yes
+      cache_valid_time: 86400
+      state: present
+      force: yes
+    tags: [ nginx ]
+
+  - name: Create document root
+    file:
+      path: "/var/www/http_host"
+      state: directory
+      owner: "www-data"
+      group: "www-data"
+      mode: '0755'
+    tags: [ nginx ]
+
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ansible-role-wordpress

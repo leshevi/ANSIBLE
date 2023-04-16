@@ -1,0 +1,6 @@
+---
+- name: Service | reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+    enabled: true

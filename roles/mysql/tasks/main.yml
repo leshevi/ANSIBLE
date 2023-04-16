@@ -1,0 +1,42 @@
+---
+- name: Install mysql
+  ansible.builtin.apt:
+    name: 
+      - mariadb-server
+      - python3
+      - python3-pip
+    state: present 
+    update_cache: true
+
+- name: Install pymysql   
+  ansible.builtin.pip:
+    name: pymysql
+    executable: pip3
+    state: present
+
+- name: Set root password
+  community.mysql.mysql_user:
+    name: root
+    login_user: root
+    password: '{{ root_pass }}'
+    login_password: '{{ root_pass }}'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+
+- name: Create a new database with name '{{ datadb }}'
+  community.mysql.mysql_db:
+    name: '{{ datadb }}'
+    login_user: root
+    login_password: '{{ root_pass }}'
+    state: present
+
+- name: Set privileged '{{ userdb }}'
+  community.mysql.mysql_user:
+    name: '{{ userdb }}'
+    password: '{{ passdb }}'
+    priv: '{{ datadb }}.*:ALL'
+    login_user: root 
+    login_password: '{{ root_pass }}'
+    state: present
+
+   

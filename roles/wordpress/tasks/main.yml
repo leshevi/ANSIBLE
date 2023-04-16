@@ -1,0 +1,37 @@
+---
+- name: Role wordpress | Download and unpack latest WordPress
+  ansible.builtin.unarchive:
+    src: https://{{ app_name }}.org/latest.tar.gz
+    dest: '{{ sites_path }}'
+    remote_src: true
+    creates: '{{ sites_path }}/{{ app_name }}'
+
+- name: Role wordpress | Set ownership
+  ansible.builtin.file:
+    path: '{{ sites_path }}'
+    state: directory
+    recurse: true
+    owner: www-data
+    group: www-data
+
+- name: Role wordpress | Add site to sites folder in Nginx
+  ansible.builtin.template:
+    src: wordpress.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+
+- name: Role wordpress | remove default page
+  ansible.builtin.file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
+
+- name: Role wordpress | add wp-config
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: '{{ sites_path }}/wp-config.php'
+
+- name: Role wordpress | activate site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/{{ app_name }}
+    dest: /etc/nginx/sites-enabled/{{ app_name }}
+    state: link
+  notify: Service | reload nginx

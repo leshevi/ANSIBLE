@@ -1,0 +1,6 @@
+---
+- name: Test php
+  hosts: localhost
+  remote_user: root
+  roles:
+    - ansible-role-php

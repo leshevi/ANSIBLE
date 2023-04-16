@@ -1,0 +1,11 @@
+---
+domain_name: wp.com
+app_name: wordpress
+php_fpm_sock: /run/php/php-fpm.sock
+
+sites_path: /var/www/html
+
+db_name: wordpress
+db_host: localhost
+db_user: wordpressuser
+db_pass: wordpresspass

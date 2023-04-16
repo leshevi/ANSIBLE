@@ -1,0 +1,22 @@
+---
+- name: Role php | install PHP server and plugins
+  ansible.builtin.apt:
+    name:
+      - php-fpm
+      - php-mysql
+      - php-curl
+      - php-gd
+      - php-intl
+      - php-mbstring
+      - php-soap
+      - php-xml
+      - php-xmlrpc
+      - php-zip
+    update_cache: true
+    state: present
+
+- name: Role php | start service
+  ansible.builtin.service:
+    name: php7.4-fpm
+    state: started
+    enabled: true
